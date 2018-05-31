@@ -1,4 +1,4 @@
-package me.webapp.web.websocket;
+package me.webapp.web.open.websocket;
 
 /**
  * @author paranoidq

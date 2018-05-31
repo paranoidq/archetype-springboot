@@ -1,4 +1,4 @@
-package me.webapp.web.open;
+package me.webapp.web.open.rest;
 
 import me.webapp.config.AppSettings;
 import org.springframework.beans.factory.annotation.Autowired;
