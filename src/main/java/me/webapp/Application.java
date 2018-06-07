@@ -5,22 +5,12 @@ import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.core.io.support.SpringFactoriesLoader;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.WebApplicationInitializer;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 @SpringBootApplication
