@@ -59,7 +59,7 @@ public class RestApiAccessTiming {
     public void doAfterReturning(Object ret) throws Throwable {
         StopWatch stopWatch = stopWatchThreadLocal.get();
         stopWatch.stop();
-        logger.info("[RestApi] INVOKING TIME: " + stopWatch.getTime());
+        logger.info("[RestApi] INVOKING TIME: " + stopWatch.getTime() + "(ms)");
         // For gc
         stopWatchThreadLocal.remove();
     }

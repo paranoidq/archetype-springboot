@@ -9,6 +9,7 @@
         <Property name="dailyLogFileName">daily</Property>
         <!--单文件日志名称-->
         <Property name="logFileName">daily</Property>
+        <Property name="layoutPattern">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
     </Properties>
 
     <!-- appender配置 -->
@@ -16,19 +17,23 @@
 
         <!--console控制台输出-->
         <Console name="APPENDER_CONSOLE" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="${layoutPattern}}"/>
         </Console>
 
         <!--daily滚动日志-->
-        <RollingFile name="APPENDER_DAILY_ROLLING" fileName="${baseLogPath}/${dailyLogFileName}.log" filePattern="${baseLogPath}/${dailyLogFileName}-%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-            <TimeBasedTriggeringPolicy interval="5"/>
-　　　　　　　<SizeBasedTriggeringPolicy size="10 MB" />
+        <RollingFile name="APPENDER_DAILY_ROLLING" fileName="${baseLogPath}/${dailyLogFileName}.log"
+                     filePattern="${baseLogPath}/${dailyLogFileName}-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${layoutPattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="5"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
         </RollingFile>
 
         <!--单一文件日志-->
         <File name="APPENDER_FILE" fileName="${logFileName}" bufferedIO="false">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="${layoutPattern}"/>
         </File>
     </Appenders>
 
@@ -53,7 +58,7 @@
 
 
         <!--# Spring日志配置 start-->
-        <Logger name="org.springframework" level="error" additivity="false">
+        <Logger name="org.springframework" level="info" additivity="false">
             <AppenderRef ref="APPENDER_CONSOLE" />
 　　　　 </Logger>
         <!--# Spring日志配置 end-->
