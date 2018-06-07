@@ -16,5 +16,6 @@ public class CustomApplicationContextInitializer implements ApplicationContextIn
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         //TODO
+        System.out.println("@@@@@@@@");
     }
 }

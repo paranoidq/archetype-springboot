@@ -5,6 +5,7 @@ import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -37,6 +38,7 @@ public class Application {
             bootstrap.run(args);
         } catch (Throwable throwable) {
             System.err.println("SpringBoot application startup failed");
+            throwable.printStackTrace();
             System.exit(-1);
         }
     }
@@ -62,8 +64,8 @@ public class Application {
         String[] initializerClasses = StringUtils.commaDelimitedListToStringArray( properties.getProperty("initializerClasses"));
 
         for (String clazz : initializerClasses) {
-            Class.forName(clazz).newInstance();
-            bootstrap.addInitializers();
+            ApplicationContextInitializer customizeInitializer = (ApplicationContextInitializer) Class.forName(clazz).newInstance();
+            bootstrap.addInitializers(customizeInitializer);
         }
     }
 }
