@@ -16,6 +16,6 @@ public class CustomWebApplicationInitializer implements WebApplicationInitialize
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         // TODO
-
+        System.out.println("### Custom WebApplicationInitializer invoked");
     }
 }
