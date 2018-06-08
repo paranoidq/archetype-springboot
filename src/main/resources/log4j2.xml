@@ -8,8 +8,13 @@
         <!--daily日志名称-->
         <Property name="dailyLogFileName">daily</Property>
         <!--单文件日志名称-->
-        <Property name="logFileName">daily</Property>
+        <Property name="logFileName">app.log</Property>
         <Property name="layoutPattern">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+
+
+        <Property name="logging.level.root">error</Property>
+        <Property name="logging.level.webapp">info</Property>
+        <Property name="logging.level.springframework">info</Property>
     </Properties>
 
     <!-- appender配置 -->
@@ -42,7 +47,7 @@
     <Loggers>
 
         <!--# Root日志配置 start-->
-        <Root level="error">
+        <Root level="${logging.level.root}">
             <AppenderRef ref="APPENDER_CONSOLE" />
         </Root>
         <!--# Root日志配置 end-->
@@ -50,7 +55,7 @@
 
         <!--# 应用日志配置 start-->
         <!--## 应用全局配置-->
-        <Logger name="me.webapp" level="info" additivity="false">
+        <Logger name="me.webapp" level="${logging.level.webapp}" additivity="false">
             <!--<AppenderRef ref="APPENDER_DAILY_ROLLING" />-->
             <AppenderRef ref="APPENDER_CONSOLE" />
 　　　　 </Logger>
@@ -58,7 +63,7 @@
 
 
         <!--# Spring日志配置 start-->
-        <Logger name="org.springframework" level="info" additivity="false">
+        <Logger name="org.springframework" level="${logging.level.springframework}" additivity="false">
             <AppenderRef ref="APPENDER_CONSOLE" />
 　　　　 </Logger>
         <!--# Spring日志配置 end-->
