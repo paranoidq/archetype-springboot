@@ -1,30 +1,5 @@
 package me.webapp.web.common;
 
-/*-
- * ========================LICENSE_START=================================
- * springmvc
- * %%
- * Copyright (C) 2018 Wei Qian
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * =========================LICENSE_END==================================
- */
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -56,11 +31,11 @@ public class ApiResponse implements Serializable{
     /**
      * 报错原因，当状态码为{@link ApiErrorCode#OK}时，该字段为空
      */
-    private String reason;
+    private String error;
     /**
      * 返回报文信息
      */
-    private Object msg;
+    private Object data;
     /**
      * 返回应答的时间戳
      */
@@ -69,10 +44,10 @@ public class ApiResponse implements Serializable{
     // TODO. other useful fields ???
 
 
-    public ApiResponse(ApiErrorCode code, String reason, Object msg) {
+    public ApiResponse(ApiErrorCode code, String error, Object msg) {
         this.code = code;
-        this.reason = reason;
-        this.msg = msg;
+        this.error = error;
+        this.data = msg;
         this.timestamp = System.currentTimeMillis();
     }
 
@@ -102,23 +77,23 @@ public class ApiResponse implements Serializable{
      * 报错时的应答对象实例
      *
      * @param errorCode
-     * @param reason
+     * @param error
      * @return
      */
-    public static ApiResponse createError(ApiErrorCode errorCode, String reason) {
-        return createError(errorCode, reason, "");
+    public static ApiResponse createError(ApiErrorCode errorCode, String error) {
+        return createError(errorCode, error, "");
     }
 
     /**
      * 报错时的应答对象实例
      *
      * @param errorCode
-     * @param reason
+     * @param error
      * @param message
      * @return
      */
-    public static ApiResponse createError(ApiErrorCode errorCode, String reason, Object message) {
-        return new ApiResponse(errorCode, reason, message);
+    public static ApiResponse createError(ApiErrorCode errorCode, String error, Object message) {
+        return new ApiResponse(errorCode, error, message);
     }
 
 
@@ -130,20 +105,20 @@ public class ApiResponse implements Serializable{
         this.code = code;
     }
 
-    public String getReason() {
-        return reason;
+    public String getError() {
+        return error;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setError(String error) {
+        this.error = error;
     }
 
-    public Object getMsg() {
-        return msg;
+    public Object getData() {
+        return data;
     }
 
-    public void setMsg(Object msg) {
-        this.msg = msg;
+    public void setData(Object data) {
+        this.data = data;
     }
 
     public long getTimestamp() {
@@ -172,11 +147,11 @@ public class ApiResponse implements Serializable{
             gen.writeFieldName("code");
             gen.writeString(apiResponse.code.toString());
 
-            gen.writeFieldName("reason");
-            gen.writeString(apiResponse.reason);
+            gen.writeFieldName("error");
+            gen.writeString(apiResponse.error);
 
-            gen.writeFieldName("msg");
-            gen.writeString(String.valueOf(apiResponse.msg));
+            gen.writeFieldName("data");
+            gen.writeString(String.valueOf(apiResponse.data));
 
             gen.writeFieldName("timestamp");
             gen.writeString(Long.toString(apiResponse.timestamp));

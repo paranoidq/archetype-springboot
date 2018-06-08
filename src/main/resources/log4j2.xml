@@ -12,9 +12,9 @@
         <Property name="layoutPattern">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
 
 
-        <Property name="logging.level.root">error</Property>
-        <Property name="logging.level.webapp">info</Property>
-        <Property name="logging.level.springframework">info</Property>
+        <Property name="logging.level.root">debug</Property>
+        <Property name="logging.level.webapp">debug</Property>
+        <Property name="logging.level.springframework">debug</Property>
     </Properties>
 
     <!-- appender配置 -->
