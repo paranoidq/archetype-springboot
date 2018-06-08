@@ -12,7 +12,6 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  *
@@ -28,17 +27,19 @@ public class TransparentJsonHttpResponseMessageConverter extends AbstractHttpMes
     public TransparentJsonHttpResponseMessageConverter() {
         // 必须填写MediaType
         // SpringMVC中根据MediaType和对象类型进行判断是否由该converter进行转换
-        setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_STREAM_JSON_VALUE));
+        setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_STREAM_JSON));
     }
 
     /**
      * 只要是非基本类型，都匹配
+     *
      * @param aClass
      * @return
      */
     @Override
     protected boolean supports(Class aClass) {
-        return !aClass.isPrimitive();
+        return !aClass.isPrimitive()
+            && !ApiResponse.class.isAssignableFrom(aClass);  // 如果返回ApiResponse，则不执行该converter的处理
     }
 
 

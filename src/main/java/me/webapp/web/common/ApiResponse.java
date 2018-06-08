@@ -12,9 +12,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- *
  * 当采用rest方式返回时，默认应答HTTP 200
- *
+ * <p>
  * ApiResponse作为被{@link org.springframework.http.converter.json.MappingJackson2HttpMessageConverter}处理的对象，必须要有getter和setter方法
  *
  * @author paranoidq
@@ -22,7 +21,7 @@ import java.io.Serializable;
  */
 @ResponseStatus(HttpStatus.OK)
 @JsonSerialize(using = ApiResponse.ApiResponseSerializer.class)
-public class ApiResponse implements Serializable{
+public class ApiResponse implements Serializable {
 
     /**
      * 状态码
@@ -151,7 +150,7 @@ public class ApiResponse implements Serializable{
             gen.writeString(apiResponse.error);
 
             gen.writeFieldName("data");
-            gen.writeString(String.valueOf(apiResponse.data));
+            gen.writeObject(apiResponse.data);
 
             gen.writeFieldName("timestamp");
             gen.writeString(Long.toString(apiResponse.timestamp));
