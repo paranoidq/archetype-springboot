@@ -1,12 +1,10 @@
 package me.webapp.domain;
 
-import java.io.Serializable;
-
 /**
  * @author paranoidq
  * @since 1.0.0
  */
-public class User implements Serializable {
+public class User extends BaseDomain {
 
     private int id;
     private String username;

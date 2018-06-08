@@ -1,5 +1,6 @@
 package me.webapp;
 
+import com.spring4all.swagger.EnableSwagger2Doc;
 import org.springframework.boot.Banner;
 import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +17,7 @@ import java.util.Properties;
 
 @SpringBootApplication
 @EnableConfigurationProperties
+@EnableSwagger2Doc
 public class Application {
 
 

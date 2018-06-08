@@ -2,6 +2,7 @@ package me.webapp.web.support.messageConverter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import me.webapp.common.utils.JacksonUtil;
+import me.webapp.domain.BaseDomain;
 import me.webapp.web.common.ApiResponse;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -33,15 +34,16 @@ public class TransparentJsonHttpResponseMessageConverter extends AbstractHttpMes
     /**
      * 只要是非基本类型，都匹配
      *
+     * update: 为了避免拦截swagger页面，这里需要针对返回类型进行检测，只有返回类型为{@link BaseDomain}的子类时，才使用该HttpMessageConverter进行转换
+     *
      * @param aClass
      * @return
      */
     @Override
     protected boolean supports(Class aClass) {
         return !aClass.isPrimitive()
-            && !ApiResponse.class.isAssignableFrom(aClass);  // 如果返回ApiResponse，则不执行该converter的处理
+            && BaseDomain.class.isAssignableFrom(aClass);
     }
-
 
 
 

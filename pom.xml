@@ -127,7 +127,7 @@
         <!--# 通用工具依赖 end-->
 
 
-        <!--# metrics依赖-->
+        <!--# metrics依赖 start-->
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
@@ -138,7 +138,16 @@
             <artifactId>metrics-annotation</artifactId>
             <version>4.0.2</version>
         </dependency>
+        <!--# metrics依赖 start-->
 
+
+        <!--#swagger2 API自动生成 start-->
+        <dependency>
+            <groupId>com.spring4all</groupId>
+            <artifactId>swagger-spring-boot-starter</artifactId>
+            <version>1.7.1.RELEASE</version>
+        </dependency>
+        <!--#swagger2 API自动生成 end-->
 
 
     </dependencies>
