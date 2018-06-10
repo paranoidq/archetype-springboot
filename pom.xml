@@ -162,4 +162,20 @@
 	</build>
 
 
+    <!--# 发布内网nexus配置-->
+    <!--同时需要配置.m2/settings.xml中的server，添加id（与此对应）、username和password-->
+    <distributionManagement>
+        <repository>
+            <id>deployment</id>
+            <name>Internal repository for releases</name>
+            <url>http://{内网服务器地址}/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>deployment</id>
+            <name>Internal repository for snapshots</name>
+            <url>http://{内网服务器地址}/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
 </project>
