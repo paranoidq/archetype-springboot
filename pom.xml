@@ -94,6 +94,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
+        <!--#配置devtools, 提供开发便利：关闭默认cache、自动重启等-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!--# SpringBoot相关依赖 end-->
 
         <!--# 通用工具依赖 start-->
