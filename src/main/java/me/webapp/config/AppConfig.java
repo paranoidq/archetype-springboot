@@ -21,7 +21,7 @@ public class AppConfig {
     private String x;
 
     /** 对外开放API接口base路径*/
-    private String apiOpenPath = "/open";
+    private String apiOpenPath = "/api";
     /** 对管理侧开放API接口base路径*/
     private String apiAdminPath = "/admin";
 

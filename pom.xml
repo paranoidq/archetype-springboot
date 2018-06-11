@@ -100,6 +100,10 @@
             <!--<artifactId>spring-boot-devtools</artifactId>-->
             <!--<optional>true</optional>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
         <!--# SpringBoot相关依赖 end-->
 
         <!--# 通用工具依赖 start-->
