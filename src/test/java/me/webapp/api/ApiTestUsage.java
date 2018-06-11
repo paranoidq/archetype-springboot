@@ -1,4 +1,4 @@
-package me.webapp;
+package me.webapp.api;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebClient
-public class SpringBooApplicationTestUsage {
+public class ApiTestUsage {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
