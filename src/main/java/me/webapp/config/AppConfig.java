@@ -1,20 +1,18 @@
 package me.webapp.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
+ * 开放接口侧配置参数类
+ *
  * @author paranoidq
  * @since 1.0.0
  */
 @Component
-@PropertySource(value = "classpath:app.properties", encoding = "UTF-8")
 @ConfigurationProperties(prefix = "app")
-@EnableCaching
-@EnableTransactionManagement
+@PropertySource(value = "classpath:config/${spring.profiles.active}/app.properties", encoding = "UTF-8")
 public class AppConfig {
 
     // For test

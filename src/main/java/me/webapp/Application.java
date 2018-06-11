@@ -7,11 +7,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 
 import java.net.URL;
@@ -20,6 +22,8 @@ import java.util.Properties;
 @SpringBootApplication
 @EnableConfigurationProperties
 @EnableSwagger2Doc
+@EnableCaching
+@EnableTransactionManagement
 public class Application {
 
 
