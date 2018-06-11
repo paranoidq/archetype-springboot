@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebCl
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -20,7 +21,7 @@ public class SpringBooApplicationTestUsage {
 
     /**
      * 自动注入{@link WebTestClient}实例
-     * 需要添加注解{@link AutoConfigureWebClient}
+     * 需要添加注解{@link AutoConfigureWebClient}，并添加spring-boot-starter-webflux依赖
      */
     @Autowired
     private WebTestClient webTestClient;
