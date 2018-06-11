@@ -33,6 +33,9 @@ public class CustomWebSecurityConfiguration extends WebSecurityConfigurerAdapter
         http.authorizeRequests()
             .antMatchers("/**").permitAll()
             .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**").permitAll();
+
+        // Web Api不经过浏览器，无需开启CSRF Protection
+        http.csrf().disable();
     }
 
 

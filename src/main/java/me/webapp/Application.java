@@ -4,9 +4,11 @@ import com.spring4all.swagger.EnableSwagger2Doc;
 import org.springframework.boot.Banner;
 import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -24,6 +26,9 @@ public class Application {
 	public static void main(String[] args) {
         try {
             SpringApplication bootstrap = new SpringApplication(Application.class);
+
+            // 设置添加命令行参数到Environment中
+            bootstrap.setAddCommandLineProperties(true);
 
             // Customize springboot startup banner
             bootstrap.setBannerMode(Banner.Mode.CONSOLE);

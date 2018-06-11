@@ -1,6 +1,6 @@
 package me.webapp.web.open.rest;
 
-import me.webapp.config.AppSettings;
+import me.webapp.config.AppConfig;
 import me.webapp.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndexController {
 
     @Autowired
-    private AppSettings appSettings;
+    private AppConfig appConfig;
 
     @RequestMapping("/hello")
     public String index() {
-        return appSettings.getX();
+        return appConfig.getX();
     }
 
 
