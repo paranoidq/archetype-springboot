@@ -42,7 +42,7 @@ public class UserService extends DomainService<User> {
 
     @Override
     protected List<User> query0(QueryParam queryParam) throws Exception {
-        return null;
+        return userRepository.query(queryParam.getQueryParams());
     }
 
     @Override

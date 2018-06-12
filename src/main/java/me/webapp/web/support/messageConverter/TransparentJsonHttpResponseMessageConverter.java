@@ -13,6 +13,7 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  *
@@ -41,8 +42,8 @@ public class TransparentJsonHttpResponseMessageConverter extends AbstractHttpMes
      */
     @Override
     protected boolean supports(Class aClass) {
-        return !aClass.isPrimitive()
-            && BaseDomain.class.isAssignableFrom(aClass);
+        return !aClass.isPrimitive();
+//            && ( BaseDomain.class.isAssignableFrom(aClass) || aClass.getName().startsWith("me.webapp.domain"));
     }
 
 

@@ -1,6 +1,7 @@
 package me.webapp.web.open.rest;
 
 import me.webapp.config.AppConfig;
+import me.webapp.domain.QueryParam;
 import me.webapp.domain.User;
 import me.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class IndexController {
 
 
     @RequestMapping("/user")
-    public User userTest() {
-        List<User> users = userService.queryAll();
-        return users.get(0);
+    public List<User> userTest() {
+        List<User> users = userService.query(new QueryParam().orderBy("id").sorting(QueryParam.Sorting.ASC));
+        return users;
     }
 
 }
