@@ -1,6 +1,5 @@
 package me.webapp.config;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,6 +10,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @MapperScan(basePackages = "me.webapp.dao")
 public class MyBatisConfig {
-
 
 }

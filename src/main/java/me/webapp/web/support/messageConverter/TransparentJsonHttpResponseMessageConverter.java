@@ -42,7 +42,7 @@ public class TransparentJsonHttpResponseMessageConverter extends AbstractHttpMes
      */
     @Override
     protected boolean supports(Class aClass) {
-        return !aClass.isPrimitive();
+        return !aClass.isPrimitive() && !ApiResponse.class.isAssignableFrom(aClass);
 //            && ( BaseDomain.class.isAssignableFrom(aClass) || aClass.getName().startsWith("me.webapp.domain"));
     }
 

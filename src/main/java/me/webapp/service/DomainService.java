@@ -1,16 +1,20 @@
 package me.webapp.service;
 
 import me.webapp.domain.PageParam;
-import me.webapp.domain.QueryParam;
 import me.webapp.exception.ServiceException;
 
 import java.util.List;
 
 /**
+ *
+ * Domain操作service的基类，提供基础的功能，子类根据需要增加更为复杂的查询功能
+ *
+ * TODO: 尝试了通用化（例如将参数统一传递，然后到SQL层进行判断处理），但是没有成功
+ *
  * @author paranoidq
  * @since 1.0.0
  */
-public abstract class DomainService<T> implements AppService {
+public interface DomainService<T> extends AppService {
 
 
     /**
@@ -18,13 +22,7 @@ public abstract class DomainService<T> implements AppService {
      * @param item
      * @throws ServiceException
      */
-    public void add(T item) throws ServiceException {
-        try {
-            add0(item);
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
-    }
+    void add(T item) throws ServiceException;
 
 
     /**
@@ -32,13 +30,7 @@ public abstract class DomainService<T> implements AppService {
      * @param item
      * @throws ServiceException
      */
-    public void delete(T item) throws ServiceException {
-        try {
-            delete0(item);
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
-    }
+    void delete(T item) throws ServiceException;
 
 
 
@@ -47,13 +39,7 @@ public abstract class DomainService<T> implements AppService {
      * @param item
      * @throws ServiceException
      */
-    public void update(T item) throws ServiceException {
-        try {
-            update0(item);
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
-    }
+    void update(T item) throws ServiceException;
 
 
     /**
@@ -61,28 +47,16 @@ public abstract class DomainService<T> implements AppService {
      * @throws ServiceException
      * @return
      */
-    public List<T> queryAll() throws ServiceException {
-        try {
-            return queryAll0();
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
-    }
+    List<T> queryAll() throws ServiceException;
 
 
     /**
-     * 根据查询条件获取记录
-     * @param queryParam
-     * @throws ServiceException
+     * 根据id获取记录
+     * @param id
      * @return
+     * @throws ServiceException
      */
-    public List<T> query(QueryParam queryParam) throws ServiceException {
-        try {
-            return query0(queryParam);
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
-    }
+    T query(int id) throws ServiceException;
 
 
     /**
@@ -91,67 +65,14 @@ public abstract class DomainService<T> implements AppService {
      * @throws ServiceException
      * @return
      */
-    public List<T> query(PageParam pageParam) throws ServiceException {
-        try {
-            return query0(pageParam);
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
-    }
+    List<T> query(PageParam pageParam) throws ServiceException;
 
-
-    /**
-     * 根据查询条件和分页条件获取记录
-     * @param queryParam
-     * @param pageParam
-     * @throws ServiceException
-     * @return
-     */
-    public List<T> query(QueryParam queryParam, PageParam pageParam) throws ServiceException {
-        try {
-            return query0(queryParam, pageParam);
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
-    }
 
     /**
      * 获取记录记录数
      * @throws ServiceException
      * @return
      */
-    public int queryRows() throws ServiceException {
-        try {
-            return queryRows0();
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
-    }
-
-
-    /**
-     * 根据查询条件获取记录数
-     * @param queryParam
-     * @throws ServiceException
-     * @return
-     */
-    public int queryRows(QueryParam queryParam) throws ServiceException {
-        try {
-            return queryRows0(queryParam);
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
-    }
-
-
-    protected abstract void add0(T item) throws Exception;
-    protected abstract void delete0(T item) throws Exception;
-    protected abstract void update0(T item) throws Exception;
-    protected abstract List<T> queryAll0() throws Exception;
-    protected abstract List<T> query0(QueryParam queryParam) throws Exception;
-    protected abstract List<T> query0(PageParam pageParam) throws Exception;
-    protected abstract List<T> query0(QueryParam queryParam, PageParam pageParam) throws Exception;
-    protected abstract int queryRows0() throws Exception;
-    protected abstract int queryRows0(QueryParam queryParam) throws Exception;
+    int queryRows() throws ServiceException;
 
 }

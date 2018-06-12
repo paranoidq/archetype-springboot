@@ -169,6 +169,13 @@
         <!--#swagger2 API自动生成 end-->
 
 
+        <!--#mybatis分页插件-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.4</version>
+        </dependency>
+
     </dependencies>
 
 	<build>

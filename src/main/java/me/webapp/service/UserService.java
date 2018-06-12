@@ -1,11 +1,11 @@
 package me.webapp.service;
 
-import me.webapp.dao.UserRepository;
+import me.webapp.dao.UseMapper;
 import me.webapp.domain.PageParam;
-import me.webapp.domain.QueryParam;
 import me.webapp.domain.User;
+import me.webapp.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -14,54 +14,56 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
-public class UserService extends DomainService<User> {
+public class UserService implements DomainService<User> {
 
     @Autowired
-    UserRepository userRepository;
+    private UseMapper useMapper;
 
 
     @Override
-    protected void add0(User item) throws Exception {
+    public void add(User item) throws ServiceException {
 
     }
 
     @Override
-    protected void delete0(User item) throws Exception {
+    public void delete(User item) throws ServiceException {
 
     }
 
     @Override
-    protected void update0(User item) throws Exception {
+    public void update(User item) throws ServiceException {
 
     }
 
     @Override
-    protected List<User> queryAll0() throws Exception {
-        return userRepository.queryAll();
+    public List<User> queryAll() throws ServiceException {
+        try {
+            return useMapper.queryAll();
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    protected List<User> query0(QueryParam queryParam) throws Exception {
-        return userRepository.query(queryParam.getQueryParams());
+    public User query(int id) throws ServiceException {
+        try {
+            return useMapper.query(id);
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    protected List<User> query0(PageParam pageParam) throws Exception {
+    public List<User> query(PageParam pageParam) throws ServiceException {
         return null;
     }
 
     @Override
-    protected List<User> query0(QueryParam queryParam, PageParam pageParam) throws Exception {
-        return null;
-    }
-
-    @Override
-    protected int queryRows0() throws Exception {
-        return 0;
-    }
-
-    @Override
-    protected int queryRows0(QueryParam queryParam) throws Exception {
-        return 0;
+    public int queryRows() throws ServiceException {
+        try {
+            return useMapper.queryRows();
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
     }
 }
