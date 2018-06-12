@@ -4,16 +4,17 @@ package me.webapp.domain;
  * @author paranoidq
  * @since 1.0.0
  */
-public class User extends BaseDomain {
+public class Account extends BaseDomain {
 
     private int id;
     private String username;
+    private String email;
     private String password;
 
-    public User() {
+    public Account() {
     }
 
-    public User(int id, String username, String password) {
+    public Account(int id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -41,5 +42,13 @@ public class User extends BaseDomain {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

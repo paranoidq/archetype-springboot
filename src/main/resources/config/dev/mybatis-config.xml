@@ -34,7 +34,7 @@
 
     <!-- 类型别名，可以避免在需要type的时候引用类的全限定名 -->
     <typeAliases>
-        <typeAlias type="me.webapp.domain.User" alias="User"/>
+        <typeAlias type="me.webapp.domain.Account" alias="User"/>
     </typeAliases>
 
     <!--

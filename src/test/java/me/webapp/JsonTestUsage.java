@@ -1,13 +1,11 @@
 package me.webapp;
 
-import me.webapp.domain.User;
+import me.webapp.domain.Account;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -28,7 +26,7 @@ public class JsonTestUsage {
 
 
     @Autowired
-    private JacksonTester<User> jacksonTester;
+    private JacksonTester<Account> jacksonTester;
 
 
     @Test
@@ -41,7 +39,7 @@ public class JsonTestUsage {
     public void testJsonDeserialize() throws Exception {
         String json = "{\"id\":\"1\", \"username\":\"paranoidq\",\"password\":\"88863650qw\"}";
         assertThat(jacksonTester.parse(json)).isEqualTo(
-            new User(1, "paranoidq", "password")
+            new Account(1, "paranoidq", "password")
         );
 
     }

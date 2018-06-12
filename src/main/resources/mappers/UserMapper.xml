@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="me.webapp.dao.UseMapper">
+<mapper namespace="me.webapp.dao.AccountDao">
 
     <!-- 二级缓存配置，需要同时全局开启cacheEnabled -->
     <cache
@@ -23,17 +23,17 @@
     <!--userCache：该操作是否采用二级缓存，默认true-->
     <!--flushCache 指定该操作是否清空二级缓存，默认insert\update\delete为true, select为false-->
     <select id="queryAll" resultMap="userResultMap" useCache="true" flushCache="false">
-        SELECT * FROM tbl_user
+        SELECT * FROM tbl_account
     </select>
 
     
     <select id="query" resultMap="userResultMap" parameterType="int" useCache="true" flushCache="false">
-        SELECT * FROM tbl_user WHERE id=#{id}
+        SELECT * FROM tbl_account WHERE id=#{id}
     </select>
 
 
     <select id="queryRows" resultType="int" useCache="true" flushCache="false">
-        SELECT COUNT(id) FROM tbl_user
+        SELECT COUNT(id) FROM tbl_account
     </select>
 
 </mapper>

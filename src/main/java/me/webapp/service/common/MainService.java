@@ -1,7 +1,6 @@
 package me.webapp.service.common;
 
 import me.webapp.exception.ServiceException;
-import me.webapp.service.LogicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-public class MainService implements LogicService {
+public class MainService {
 
     @Autowired
     private JavaMailSender javaMailSender;

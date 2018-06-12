@@ -1,8 +1,8 @@
 package me.webapp.web.open.rest;
 
 import me.webapp.config.AppConfig;
-import me.webapp.domain.User;
-import me.webapp.service.UserService;
+import me.webapp.domain.Account;
+import me.webapp.service.AccountService;
 import me.webapp.web.common.ApiResponse;
 import me.webapp.web.common.MediaTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class IndexController {
     private AppConfig appConfig;
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @RequestMapping("/hello")
     public String index() {
@@ -31,14 +31,14 @@ public class IndexController {
 
 
     @RequestMapping(value = "/user", produces = MediaTypes.JSON_UTF_8)
-    public List<User> userTest() {
-        List<User> users = userService.queryAll();
-        return users;
+    public List<Account> userTest() {
+        List<Account> accounts = accountService.queryAccounts();
+        return accounts;
     }
 
     @RequestMapping(value = "/userRows", produces = MediaTypes.JSON_UTF_8)
     public ApiResponse userRowsTest() {
-        int rows = userService.queryRows();
+        int rows = accountService.countAccounts();
         return ApiResponse.createOk(rows);
     }
 
