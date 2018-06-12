@@ -2,9 +2,12 @@ package me.webapp.web.open.rest;
 
 import me.webapp.config.AppConfig;
 import me.webapp.domain.User;
+import me.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author paranoidq
@@ -16,6 +19,9 @@ public class IndexController {
     @Autowired
     private AppConfig appConfig;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/hello")
     public String index() {
         return appConfig.getX();
@@ -24,8 +30,8 @@ public class IndexController {
 
     @RequestMapping("/user")
     public User userTest() {
-        User user = new User(1, "paranoidq", "888");
-        return user;
+        List<User> users = userService.queryAll();
+        return users.get(0);
     }
 
 }
