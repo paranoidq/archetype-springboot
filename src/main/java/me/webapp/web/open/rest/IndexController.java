@@ -4,6 +4,7 @@ import me.webapp.config.AppConfig;
 import me.webapp.domain.User;
 import me.webapp.service.UserService;
 import me.webapp.web.common.ApiResponse;
+import me.webapp.web.common.MediaTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,13 +30,13 @@ public class IndexController {
     }
 
 
-    @RequestMapping("/user")
+    @RequestMapping(value = "/user", produces = MediaTypes.JSON_UTF_8)
     public List<User> userTest() {
         List<User> users = userService.queryAll();
         return users;
     }
 
-    @RequestMapping("/userRows")
+    @RequestMapping(value = "/userRows", produces = MediaTypes.JSON_UTF_8)
     public ApiResponse userRowsTest() {
         int rows = userService.queryRows();
         return ApiResponse.createOk(rows);

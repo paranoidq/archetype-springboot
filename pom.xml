@@ -159,7 +159,6 @@
         </dependency>
         <!--# metrics依赖 start-->
 
-
         <!--#swagger2 API自动生成 start-->
         <dependency>
             <groupId>com.spring4all</groupId>
@@ -168,12 +167,18 @@
         </dependency>
         <!--#swagger2 API自动生成 end-->
 
-
         <!--#mybatis分页插件-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
             <version>5.1.4</version>
+        </dependency>
+
+        <!--JMX restful工具 jolokia-->
+        <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-core</artifactId>
+            <version>1.5.0</version>
         </dependency>
 
     </dependencies>
