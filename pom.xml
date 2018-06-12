@@ -167,19 +167,29 @@
         </dependency>
         <!--#swagger2 API自动生成 end-->
 
-        <!--#mybatis分页插件-->
+        <!--#mybatis分页插件 start-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
             <version>5.1.4</version>
         </dependency>
+        <!--#mybatis分页插件 end-->
 
-        <!--JMX restful工具 jolokia-->
+        <!--#JMX restful工具 jolokia start-->
         <dependency>
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-core</artifactId>
             <version>1.5.0</version>
         </dependency>
+        <!--#JMX restful工具 jolokia end-->
+
+
+        <!--#JavaMail依赖 start-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <!--#JavaMail依赖 end-->
 
     </dependencies>
 
