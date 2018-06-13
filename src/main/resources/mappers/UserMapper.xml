@@ -36,4 +36,8 @@
         SELECT COUNT(id) FROM tbl_account
     </select>
 
+    <select id="queryByEmail" resultMap="userResultMap" useCache="true" flushCache="false">
+        select * from tbl_account where email=#{email} limit 1
+    </select>
+
 </mapper>

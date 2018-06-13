@@ -1,4 +1,4 @@
-package me.webapp.common.utils;
+package me.webapp.common.utils.text;
 
 import com.google.common.hash.Hashing;
 import me.webapp.common.annotation.NotNull;

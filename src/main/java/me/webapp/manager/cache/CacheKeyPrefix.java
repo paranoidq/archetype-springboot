@@ -1,4 +1,4 @@
-package me.webapp.manager.redis;
+package me.webapp.manager.cache;
 
 /**
  * 缓存的前缀, 统一管理

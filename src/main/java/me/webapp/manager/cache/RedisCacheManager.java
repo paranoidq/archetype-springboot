@@ -1,4 +1,4 @@
-package me.webapp.manager.redis;
+package me.webapp.manager.cache;
 
 import me.webapp.cache.redis.RedisCache;
 import me.webapp.common.annotation.Manager;

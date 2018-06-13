@@ -3,7 +3,7 @@ package me.webapp.cache.redis;
 import com.google.common.base.Joiner;
 import me.webapp.common.annotation.NotNull;
 import me.webapp.config.RedisConfig;
-import me.webapp.manager.redis.CacheKeyPrefix;
+import me.webapp.manager.cache.CacheKeyPrefix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;

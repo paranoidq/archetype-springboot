@@ -1,7 +1,7 @@
 package me.webapp.web.open.rest;
 
-import me.webapp.manager.redis.CacheKeyPrefix;
-import me.webapp.manager.redis.RedisCacheManager;
+import me.webapp.manager.cache.CacheKeyPrefix;
+import me.webapp.manager.cache.RedisCacheManager;
 import me.webapp.web.common.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
