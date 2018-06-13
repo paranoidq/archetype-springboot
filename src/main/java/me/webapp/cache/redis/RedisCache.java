@@ -5,16 +5,12 @@ import me.webapp.common.annotation.NotNull;
 import me.webapp.config.RedisConfig;
 import me.webapp.manager.redis.CacheKeyPrefix;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
-import java.util.List;
+import javax.annotation.PostConstruct;
 
 /**
  * @author paranoidq
@@ -26,29 +22,40 @@ public class RedisCache {
     @Autowired
     private RedisConfig redisConfig;
 
-    /**
-     * 注册{@link JedisExecutor}实例Bean
-     *
-     * 智能检测采用单机jedisPool或采用jedisCluster
-     *
-     * @return
-     */
-    @Bean
-    public JedisExecutor jedisExecutor() {
+    private JedisPool jedisPool;
+    private JedisCluster jedisCluster;
+    private boolean clusterMode = false;
+
+    @PostConstruct
+    public void init() {
         RedisConfig.Pool poolConfig = redisConfig.getJedis().getPool();
         RedisConfig.Cluster clusterConfig = redisConfig.getCluster();
 
-        JedisClusterBuilder builder = JedisClusterBuilder.newBuilder(clusterConfig.getNodes(), redisConfig.getPassword())
-            .maxIdle(poolConfig.getMaxIdle())
-            .maxWaitMillis(poolConfig.getMaxWait())
-            .maxActive(poolConfig.getMaxActive())
-            .maxAttempts(poolConfig.getMaxAttempts())
-            .soTimeout(redisConfig.getSoTimeout())
-            .testWhileIdle(poolConfig.isTestWhileIdle())
-            .minEvictableIdleTimeMillis(poolConfig.getMinEvictableIdleTimeMillis())
-            .timeBetweenEvictionRunsMillis(poolConfig.getTimeBetweenEvictionRunsMillis());
-        JedisCluster jedisCluster = builder.build();
-        return new JedisExecutor(jedisCluster);
+        JedisBuilder builder = JedisBuilder.newBuilder()
+            .host(redisConfig.getHost())
+            .port(redisConfig.getPort())
+            .soTimeout(redisConfig.getSoTimeout());
+        if (poolConfig != null) {
+            builder
+                .maxIdle(poolConfig.getMaxIdle())
+                .maxWaitMillis(poolConfig.getMaxWait())
+                .maxActive(poolConfig.getMaxActive())
+                .maxAttempts(poolConfig.getMaxAttempts())
+                .testWhileIdle(poolConfig.isTestWhileIdle())
+                .minEvictableIdleTimeMillis(poolConfig.getMinEvictableIdleTimeMillis())
+                .timeBetweenEvictionRunsMillis(poolConfig.getTimeBetweenEvictionRunsMillis());
+        }
+        if (clusterConfig != null) {
+            builder.clusterNodes(clusterConfig.getNodes());
+        }
+
+        // 根据配置决定是否采用cluster模式
+        if (builder.isClusterMode()) {
+            this.jedisCluster = builder.buildJedisCluster();
+            this.clusterMode = true;
+        } else {
+            this.jedisPool = builder.buildJedisPool();
+        }
     }
 
 
@@ -59,7 +66,15 @@ public class RedisCache {
      * @return
      */
     public String get(@NotNull CacheKeyPrefix prefix, String... keys) {
-        return jedisExecutor().execute(jedis -> jedis.get(cacheKey(prefix, keys)));
+        String val;
+        if (clusterMode) {
+            val = jedisCluster.get(cacheKey(prefix, keys));
+        } else {
+            try (Jedis jedis = jedisPool.getResource()) {
+                val = jedis.get(cacheKey(prefix, keys));
+            }
+        }
+        return val;
     }
 
 
@@ -71,8 +86,16 @@ public class RedisCache {
      * @param keys
      */
     public void setEx(@NotNull CacheKeyPrefix prefix, String value, int timeout, String... keys) {
-        jedisExecutor().execute(jedis -> jedis.setex(cacheKey(prefix, keys), timeout, value));
+        if (clusterMode) {
+            jedisCluster.setex(cacheKey(prefix, keys), timeout, value);
+        } else {
+            try (Jedis jedis = jedisPool.getResource()) {
+                jedis.setex(cacheKey(prefix, keys), timeout, value);
+            }
+        }
     }
+
+
 
 
     /**

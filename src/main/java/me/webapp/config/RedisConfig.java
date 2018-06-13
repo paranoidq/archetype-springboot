@@ -15,6 +15,11 @@ import java.util.List;
 @ConfigurationProperties(prefix = "redis")
 public class RedisConfig {
 
+
+    private String host;
+
+    private int port;
+
     /**
      * Database index used by the connection factory.
      */
@@ -103,6 +108,22 @@ public class RedisConfig {
 
     public void setSoTimeout(int soTimeout) {
         this.soTimeout = soTimeout;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     /**
@@ -216,6 +237,8 @@ public class RedisConfig {
         /**
          * Comma-separated list of "host:port" pairs to bootstrap from. This represents an
          * "initial" list of cluster nodes and is required to have at least one entry.
+         *
+         * 配置该项，自动开启cluster模式，需redis也同时开启cluster模式
          */
         private List<String> nodes;
 

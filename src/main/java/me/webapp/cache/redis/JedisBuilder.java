@@ -4,19 +4,22 @@ import com.google.common.collect.Sets;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.List;
 import java.util.Set;
 
 /**
- * JedisPool builder模式
+ * builder模式
  *
  * @author paranoidq
  * @since 1.0.0
  */
-class JedisClusterBuilder {
+class JedisBuilder {
 
+    private String host = "localhost";
+    private int port = 6379;
     private String password;
     private int maxActive = 8;
     private int maxIdle = 8;
@@ -30,24 +33,61 @@ class JedisClusterBuilder {
     private List<String> clusterNodes;
 
 
-    private JedisClusterBuilder(List<String> clusterNodes, String password) {
-        this.password = password;
-        this.clusterNodes = clusterNodes;
+    private JedisBuilder() {
     }
 
-    public static JedisClusterBuilder newBuilder(List<String> clusterNodes, String password) {
-        return new JedisClusterBuilder(clusterNodes, password);
+    public static JedisBuilder newBuilder() {
+        return new JedisBuilder();
     }
 
-    public static JedisClusterBuilder newBuilder(List<String> clusterNodes) {
-        return newBuilder(clusterNodes, null);
+
+    /**
+     * 构建{@link JedisCluster}实例
+     * @return
+     */
+    public JedisCluster buildJedisCluster() {
+        JedisPoolConfig jedisPoolConfig = configJedisPool();
+        Set<HostAndPort> hostAndPorts = resolveClusterNodes(clusterNodes);
+        JedisCluster jedisCluster;
+        if (StringUtils.isEmpty(password)) {
+            jedisCluster = new JedisCluster(hostAndPorts, timeout, soTimeout, maxAttempts, jedisPoolConfig);
+        } else {
+            jedisCluster = new JedisCluster(hostAndPorts, timeout, soTimeout, maxAttempts, password, jedisPoolConfig);
+        }
+        return jedisCluster;
     }
 
     /**
-     * 构建JedisCluster实例
-     * @return jedis实例
+     * 构造{@link JedisPool}实例
+     * @return
      */
-    public JedisCluster build() {
+    public JedisPool buildJedisPool() {
+        JedisPoolConfig jedisPoolConfig = configJedisPool();
+        JedisPool jedisPool;
+        if (StringUtils.isEmpty(password)) {
+            jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout);
+        } else {
+            jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password);
+        }
+        return jedisPool;
+    }
+
+
+
+    /**
+     * 是否开启cluster模式
+     * @return
+     */
+    public boolean isClusterMode() {
+        return clusterNodes != null && !clusterNodes.isEmpty();
+    }
+
+
+    /**
+     * 配置jedisPool
+     * @return
+     */
+    private JedisPoolConfig configJedisPool() {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 
         // 配置jedis线程池数量
@@ -59,17 +99,9 @@ class JedisClusterBuilder {
         jedisPoolConfig.setTestWhileIdle(testWhileIdle);
         jedisPoolConfig.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
         jedisPoolConfig.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
-
-        Set<HostAndPort> hostAndPorts = resolveClusterNodes(clusterNodes);
-
-        JedisCluster jedisCluster;
-        if (StringUtils.isEmpty(password)) {
-            jedisCluster = new JedisCluster(hostAndPorts, timeout, soTimeout, maxAttempts, jedisPoolConfig);
-        } else {
-            jedisCluster = new JedisCluster(hostAndPorts, timeout, soTimeout, maxAttempts, password, jedisPoolConfig);
-        }
-        return jedisCluster;
+        return jedisPoolConfig;
     }
+
 
     /**
      * 解析clusterNodes字符串
@@ -87,52 +119,67 @@ class JedisClusterBuilder {
         return hostAndPorts;
     }
 
-    public JedisClusterBuilder maxActive(int maxActive) {
+    public JedisBuilder clusterNodes(List<String> clusterNodes) {
+        this.clusterNodes = clusterNodes;
+        return this;
+    }
+
+    public JedisBuilder host(String host) {
+        this.host = host;
+        return this;
+    }
+
+    public JedisBuilder port(int port) {
+        this.port = port;
+        return this;
+    }
+
+    public JedisBuilder maxActive(int maxActive) {
         if (maxActive > 0) {
             this.maxActive = maxActive;
         }
         return this;
     }
 
-    public JedisClusterBuilder maxIdle(int maxIdle) {
+    public JedisBuilder maxIdle(int maxIdle) {
         if (maxIdle > 0 && maxIdle <= maxActive) {
             this.maxIdle = maxIdle;
         }
         return this;
     }
 
-    public JedisClusterBuilder maxWaitMillis(long maxWaitMillis) {
+    public JedisBuilder maxWaitMillis(long maxWaitMillis) {
         if (maxWaitMillis > 0) {
             this.maxWaitMillis = maxWaitMillis;
         }
         return this;
     }
 
-    public JedisClusterBuilder timeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
+    public JedisBuilder timeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
         if (timeBetweenEvictionRunsMillis > 0) {
             this.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
         }
         return this;
     }
 
-    public JedisClusterBuilder minEvictableIdleTimeMillis(long minEvictableIdleTimeMillis) {
+    public JedisBuilder minEvictableIdleTimeMillis(long minEvictableIdleTimeMillis) {
         if (minEvictableIdleTimeMillis > 0) {
             this.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
         }
         return this;
     }
 
-    public JedisClusterBuilder testWhileIdle(boolean testWhileIdle) {
+    public JedisBuilder testWhileIdle(boolean testWhileIdle) {
         this.testWhileIdle = testWhileIdle;
         return this;
     }
 
-    public JedisClusterBuilder soTimeout(int soTimeout) {
+    public JedisBuilder soTimeout(int soTimeout) {
         this.soTimeout = soTimeout;
         return this;
     }
 
-    public JedisClusterBuilder maxAttempts(int maxAttempts) {
+    public JedisBuilder maxAttempts(int maxAttempts) {
         this.maxAttempts = maxAttempts;
         return this;
     }
