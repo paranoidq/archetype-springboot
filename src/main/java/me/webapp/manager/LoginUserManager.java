@@ -1,13 +1,13 @@
 package me.webapp.manager;
 
+import me.webapp.common.annotation.Manager;
 import me.webapp.domain.Account;
-import org.springframework.stereotype.Component;
 
 /**
  * @author paranoidq
  * @since 1.0.0
  */
-@Component
+@Manager
 public class LoginUserManager {
 
 
