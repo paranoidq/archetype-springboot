@@ -3,7 +3,7 @@ package me.webapp.cache.redis;
 import com.google.common.base.Joiner;
 import me.webapp.common.annotation.NotNull;
 import me.webapp.config.RedisConfig;
-import me.webapp.manager.cache.CacheKeyPrefix;
+import me.webapp.common.constants.CacheKeyPrefix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
@@ -26,7 +26,6 @@ public class RedisCache {
     private JedisCluster jedisCluster;
     private boolean clusterMode = false;
 
-    @PostConstruct
     public void init() {
         RedisConfig.Pool poolConfig = redisConfig.getJedis().getPool();
         RedisConfig.Cluster clusterConfig = redisConfig.getCluster();

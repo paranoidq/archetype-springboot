@@ -1,11 +1,11 @@
 package me.webapp.service.impl;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import me.webapp.common.utils.misc.IdGenerator;
-import me.webapp.dao.AccountDao;
+import me.webapp.common.utils.text.EncodeUtil;
+import me.webapp.common.utils.text.HashUtil;
 import me.webapp.domain.Account;
 import me.webapp.exception.ServiceException;
+import me.webapp.manager.AccountManager;
 import me.webapp.service.AccountService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -14,10 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.concurrent.TimeUnit;
-
 /**
+ * Service层为上层提供业务逻辑，但不关注具体的数据存储在缓存或是数据库中
+ * 因此，提炼出Manager层来抽象这一功能
+ *
  * @author paranoidq
  * @since 1.0.0
  */
@@ -27,22 +27,11 @@ public class AccountServiceImpl implements AccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
     @Autowired
-    private AccountDao accountDao;
-
-
-    // guava cache
-    private Cache<String, Account> loginAccounts;
-
-    @PostConstruct
-    public void init() {
-        loginAccounts = CacheBuilder.newBuilder().maximumSize(1000).expireAfterAccess(600, TimeUnit.SECONDS)
-            .build();
-    }
-
+    private AccountManager accountManager;
 
     @Transactional(readOnly = true)
     public String login(String email, String password) {
-        Account account = accountDao.queryByEmail(email);
+        Account account = accountManager.getAccountByEmail(email);
         if (account == null) {
             throw new ServiceException("用户不存在");
         }
@@ -51,22 +40,22 @@ public class AccountServiceImpl implements AccountService {
         }
 
         String token = IdGenerator.uuid2();
-        loginAccounts.put(token, account);
+        accountManager.setLogin(account, token);
         return token;
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void logout(String token) {
-        Account account = loginAccounts.getIfPresent(token);
+        Account account = accountManager.getLoginAccount(token);
         if (account == null) {
             logger.error("该token已注销");
         } else {
-            loginAccounts.invalidate(token);
+            accountManager.setLogout(token);
         }
-
     }
 
+    @Transactional
     @Override
     public void register(String email, String username, String password) throws ServiceException {
 
@@ -74,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getLoginAccount(String token) throws ServiceException {
-        Account account = loginAccounts.getIfPresent(token);
+        Account account = accountManager.getLoginAccount(token);
         if (account == null) {
             throw new ServiceException("用户未登录");
         }
@@ -93,9 +82,8 @@ public class AccountServiceImpl implements AccountService {
      * @param rawPassword
      * @return
      */
-    protected static String hashPassword(String rawPassword) {
-//        return EncodeUtil.encodeBase64(HashUtil.sha1(rawPassword));
-        return DigestUtils.md5Hex(rawPassword);
+    private static String hashPassword(String rawPassword) {
+        return EncodeUtil.encodeBase64(HashUtil.sha1(rawPassword));
     }
 
     public static void main(String[] args) {
