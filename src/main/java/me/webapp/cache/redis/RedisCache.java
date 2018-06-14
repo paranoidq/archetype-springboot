@@ -151,6 +151,13 @@ public class RedisCache {
     }
 
 
+    /**
+     * hset
+     * @param key
+     * @param field
+     * @param value
+     * @param <T>
+     */
     public <T extends Serializable> void hset(String key, String field, T value) {
         byte[] keyBytes = key.getBytes();
         byte[] fieldBytes = field.getBytes();
@@ -166,6 +173,10 @@ public class RedisCache {
     }
 
 
+    /**
+     * del
+     * @param key
+     */
     public void del(String key) {
         byte[] keyBytes = key.getBytes();
 
@@ -178,28 +189,5 @@ public class RedisCache {
         }
     }
 
-
-
-
-
-
-
-    /**
-     * 生成cacheKey
-     *
-     * 前置之后采用<code>.</code>分隔
-     * key之间采用<code>:</code>分隔
-     *
-     * @param prefix 前缀
-     * @param keys 组成key的列表
-     * @return prefix.k1:k2:...:kn
-     */
-    public String cacheKey(CacheKeyPrefix prefix, String... keys) {
-        String key = prefix.name();
-        if (keys != null && keys.length > 0) {
-            key += "." + Joiner.on(":").join(keys);
-        }
-        return key;
-    }
 
 }
