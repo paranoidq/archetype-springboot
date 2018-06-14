@@ -2,12 +2,16 @@ package me.webapp.manager;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import me.webapp.cache.redis.RedisCache;
+import me.webapp.cache.AccountCache;
 import me.webapp.common.annotation.Manager;
+import me.webapp.common.annotation.cache.CacheFirst;
+import me.webapp.common.constants.CacheKeyPrefix;
 import me.webapp.dao.AccountDao;
 import me.webapp.domain.Account;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.cache.annotation.CacheEvict;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 @Manager
 public class AccountManager {
 
+    private static final Logger logger = LoggerFactory.getLogger(AccountManager.class);
+
     // guava cache
     private Cache<String, Account> loginAccounts;
 
@@ -40,25 +46,45 @@ public class AccountManager {
 
     @Autowired
     private AccountDao accountDao;
+    @Autowired
+    private AccountCache accountCache;
 
+
+    /**
+     * TODO: 提供了最简单的缓存控制，没有考虑到更复杂的情况，例如缓存雪崩、缓存穿透等问题
+     *
+     *
+     * @param email
+     * @return
+     */
+    // 不够精确
+    @CacheFirst(prefix = CacheKeyPrefix.accounts, keys = {"email"})
     public Account getAccountByEmail(String email) {
-        // TODO
-        return accountDao.queryByEmail(email);
+        Account account = accountCache.getAccountByEmail(email);
+        if (account == null) {
+            account = accountDao.queryByEmail(email);
+            if (account != null) {
+                accountCache.cacheAccount(account);
+            } else {
+                // TODO: 缓存穿透问题
+            }
+            return account;
+        }
+        logger.info("缓存命中");
+        return account;
     }
 
     public void setLogin(Account account, String token) {
-        // TODO
-        loginAccounts.put(token, account);
+        accountCache.setLogin(account, token, 60);
     }
 
-    public Account getLoginAccount(String token) {
-        // TODO
-        return loginAccounts.getIfPresent(token);
+    public Account getLogin(String token) {
+        return accountCache.getLogin(token);
     }
 
+    @CacheEvict
     public void setLogout(String token) {
-        // TODO
-        loginAccounts.invalidate(token);
+        accountCache.logout(token);
     }
 
 }

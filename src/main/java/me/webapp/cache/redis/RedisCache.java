@@ -1,7 +1,8 @@
 package me.webapp.cache.redis;
 
 import com.google.common.base.Joiner;
-import me.webapp.common.annotation.NotNull;
+import me.webapp.cache.support.CacheSerializeHandler;
+import me.webapp.cache.support.DefaultCacheSerializeHandler;
 import me.webapp.config.RedisConfig;
 import me.webapp.common.constants.CacheKeyPrefix;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
 import javax.annotation.PostConstruct;
+import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * @author paranoidq
@@ -26,7 +29,11 @@ public class RedisCache {
     private JedisCluster jedisCluster;
     private boolean clusterMode = false;
 
-    public void init() {
+    private CacheSerializeHandler cacheSerializeHandler;
+
+
+    @PostConstruct
+    protected void init() {
         RedisConfig.Pool poolConfig = redisConfig.getJedis().getPool();
         RedisConfig.Cluster clusterConfig = redisConfig.getCluster();
 
@@ -55,44 +62,124 @@ public class RedisCache {
         } else {
             this.jedisPool = builder.buildJedisPool();
         }
+
+        // 设置序列化处理器
+        this.cacheSerializeHandler = new DefaultCacheSerializeHandler();
     }
 
 
     /**
      * get
-     * @param prefix
-     * @param keys
+     * @param key
      * @return
      */
-    public String get(@NotNull CacheKeyPrefix prefix, String... keys) {
-        String val;
+    public <T extends Serializable> Optional<T> get(String key) {
+        byte[] keyBytes = key.getBytes();
+
+        byte[] valueBytes;
         if (clusterMode) {
-            val = jedisCluster.get(cacheKey(prefix, keys));
+            valueBytes = jedisCluster.get(keyBytes);
         } else {
             try (Jedis jedis = jedisPool.getResource()) {
-                val = jedis.get(cacheKey(prefix, keys));
+                valueBytes = jedis.get(keyBytes);
             }
         }
-        return val;
+        return cacheSerializeHandler.deserialize(valueBytes);
+    }
+
+
+    /**
+     * set
+     * @param key
+     * @param value
+     * @param <T>
+     */
+    public <T extends Serializable> void set(String key, T value) {
+        byte[] keyBytes = key.getBytes();
+        byte[] valueBytes = cacheSerializeHandler.serialize(value);
+
+        if (clusterMode) {
+            jedisCluster.set(keyBytes, valueBytes);
+        } else {
+            try (Jedis jedis = jedisPool.getResource()) {
+                jedis.set(keyBytes, valueBytes);
+            }
+        }
     }
 
 
     /**
      * setEx
-     * @param prefix
+     * @param key
      * @param value
      * @param timeout
-     * @param keys
      */
-    public void setEx(@NotNull CacheKeyPrefix prefix, String value, int timeout, String... keys) {
+    public <T extends Serializable> void setEx(String key, T value, int timeout) {
+        byte[] keyBytes = key.getBytes();
+        byte[] valueBytes = cacheSerializeHandler.serialize(value);
+
         if (clusterMode) {
-            jedisCluster.setex(cacheKey(prefix, keys), timeout, value);
+            jedisCluster.setex(keyBytes, timeout, valueBytes);
         } else {
             try (Jedis jedis = jedisPool.getResource()) {
-                jedis.setex(cacheKey(prefix, keys), timeout, value);
+                jedis.setex(keyBytes, timeout, valueBytes);
             }
         }
     }
+
+
+    /**
+     * hget
+     * @param key
+     * @param field
+     * @param <T>
+     * @return
+     */
+    public <T extends Serializable> Optional<T> hget(String key, String field) {
+        byte[] keyBytes = key.getBytes();
+        byte[] fieldBytes = field.getBytes();
+
+        byte[] valueBytes;
+        if (clusterMode) {
+            valueBytes = jedisCluster.hget(keyBytes, fieldBytes);
+        } else {
+            try (Jedis jedis = jedisPool.getResource()) {
+                valueBytes = jedis.hget(keyBytes, fieldBytes);
+            }
+        }
+        return cacheSerializeHandler.deserialize(valueBytes);
+    }
+
+
+    public <T extends Serializable> void hset(String key, String field, T value) {
+        byte[] keyBytes = key.getBytes();
+        byte[] fieldBytes = field.getBytes();
+        byte[] valueByte = cacheSerializeHandler.serialize(value);
+
+        if (clusterMode) {
+            jedisCluster.hset(keyBytes, fieldBytes, valueByte);
+        } else {
+            try (Jedis jedis = jedisPool.getResource()) {
+                jedis.hset(keyBytes, fieldBytes, valueByte);
+            }
+        }
+    }
+
+
+    public void del(String key) {
+        byte[] keyBytes = key.getBytes();
+
+        if (clusterMode) {
+            jedisCluster.del(keyBytes);
+        } else {
+            try (Jedis jedis = jedisPool.getResource()) {
+                jedis.del(keyBytes);
+            }
+        }
+    }
+
+
+
 
 
 
@@ -107,11 +194,12 @@ public class RedisCache {
      * @param keys 组成key的列表
      * @return prefix.k1:k2:...:kn
      */
-    private String cacheKey(CacheKeyPrefix prefix, String... keys) {
+    public String cacheKey(CacheKeyPrefix prefix, String... keys) {
         String key = prefix.name();
         if (keys != null && keys.length > 0) {
             key += "." + Joiner.on(":").join(keys);
         }
         return key;
     }
+
 }

@@ -7,7 +7,6 @@ import me.webapp.domain.Account;
 import me.webapp.exception.ServiceException;
 import me.webapp.manager.AccountManager;
 import me.webapp.service.AccountService;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional(readOnly = true)
     public void logout(String token) {
-        Account account = accountManager.getLoginAccount(token);
+        Account account = accountManager.getLogin(token);
         if (account == null) {
             logger.error("该token已注销");
         } else {
@@ -63,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getLoginAccount(String token) throws ServiceException {
-        Account account = accountManager.getLoginAccount(token);
+        Account account = accountManager.getLogin(token);
         if (account == null) {
             throw new ServiceException("用户未登录");
         }
