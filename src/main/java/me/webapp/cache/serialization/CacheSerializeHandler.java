@@ -1,4 +1,4 @@
-package me.webapp.cache.support;
+package me.webapp.cache.serialization;
 
 import java.io.Serializable;
 import java.util.Optional;

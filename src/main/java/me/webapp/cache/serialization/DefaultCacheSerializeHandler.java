@@ -1,4 +1,4 @@
-package me.webapp.cache.support;
+package me.webapp.cache.serialization;
 
 import org.apache.commons.lang3.SerializationUtils;
 

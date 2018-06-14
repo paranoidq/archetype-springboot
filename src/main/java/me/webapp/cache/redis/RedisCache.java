@@ -1,10 +1,8 @@
 package me.webapp.cache.redis;
 
-import com.google.common.base.Joiner;
-import me.webapp.cache.support.CacheSerializeHandler;
-import me.webapp.cache.support.DefaultCacheSerializeHandler;
+import me.webapp.cache.serialization.CacheSerializeHandler;
+import me.webapp.cache.serialization.DefaultCacheSerializeHandler;
 import me.webapp.config.RedisConfig;
-import me.webapp.common.constants.CacheKeyPrefix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
