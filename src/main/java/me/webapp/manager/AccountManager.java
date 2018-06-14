@@ -53,12 +53,13 @@ public class AccountManager {
     /**
      * TODO: 提供了最简单的缓存控制，没有考虑到更复杂的情况，例如缓存雪崩、缓存穿透等问题
      *
+     * 没有防止重复登录的机制
+     * redis key值设计不合理
+     *
      *
      * @param email
      * @return
      */
-    // 不够精确
-    @CacheFirst(prefix = CacheKeyPrefix.accounts, keys = {"email"})
     public Account getAccountByEmail(String email) {
         Account account = accountCache.getAccountByEmail(email);
         if (account == null) {
@@ -82,7 +83,6 @@ public class AccountManager {
         return accountCache.getLogin(token);
     }
 
-    @CacheEvict
     public void setLogout(String token) {
         accountCache.logout(token);
     }

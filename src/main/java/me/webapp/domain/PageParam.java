@@ -1,32 +1,21 @@
 package me.webapp.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 /**
  * @author paranoidq
  * @since 1.0.0
  */
+@AllArgsConstructor
+@NoArgsConstructor
 public class PageParam {
 
+    @Getter
     private int pageNo;
+    @Getter
     private int pageSize;
+    @Getter
     private int maxPageNo;
-
-    public PageParam() {}
-
-    public PageParam(int pageNo, int pageSize, int maxPageNo) {
-        this.pageNo = pageNo;
-        this.pageSize = pageSize;
-        this.maxPageNo = maxPageNo;
-    }
-
-    public int getPageNo() {
-        return pageNo;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public int getMaxPageNo() {
-        return maxPageNo;
-    }
 }

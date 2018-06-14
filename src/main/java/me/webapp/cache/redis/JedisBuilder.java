@@ -18,18 +18,18 @@ import java.util.Set;
  */
 class JedisBuilder {
 
-    private String host = "localhost";
-    private int port = 6379;
-    private String password;
-    private int maxActive = 8;
-    private int maxIdle = 8;
-    private long maxWaitMillis = 5000;
-    private boolean testWhileIdle = true;
-    private long timeBetweenEvictionRunsMillis = 5000;
-    private long minEvictableIdleTimeMillis = 10000;
-    private int timeout = 5;
-    private int soTimeout = 5;
-    private int maxAttempts = 10;
+    private String       host                          = "localhost";
+    private int          port                          = 6379;
+    private String       password;
+    private int          maxActive                     = 8;
+    private int          maxIdle                       = 8;
+    private long         maxWaitMillis                 = 5000;
+    private boolean      testWhileIdle                 = true;
+    private long         timeBetweenEvictionRunsMillis = 5000;
+    private long         minEvictableIdleTimeMillis    = 10000;
+    private int          timeout                       = 5;
+    private int          soTimeout                     = 5;
+    private int          maxAttempts                   = 10;
     private List<String> clusterNodes;
 
 
@@ -43,6 +43,7 @@ class JedisBuilder {
 
     /**
      * 构建{@link JedisCluster}实例
+     *
      * @return
      */
     public JedisCluster buildJedisCluster() {
@@ -59,6 +60,7 @@ class JedisBuilder {
 
     /**
      * 构造{@link JedisPool}实例
+     *
      * @return
      */
     public JedisPool buildJedisPool() {
@@ -73,9 +75,9 @@ class JedisBuilder {
     }
 
 
-
     /**
      * 是否开启cluster模式
+     *
      * @return
      */
     public boolean isClusterMode() {
@@ -85,6 +87,7 @@ class JedisBuilder {
 
     /**
      * 配置jedisPool
+     *
      * @return
      */
     private JedisPoolConfig configJedisPool() {
