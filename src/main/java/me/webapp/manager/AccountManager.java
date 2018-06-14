@@ -74,8 +74,8 @@ public class AccountManager {
         return account;
     }
 
-    public void setLogin(Account account, String token) {
-        accountCache.setLogin(account, token, 60);
+    public void setLogin(Account account, String token, int timeout) {
+        accountCache.setLogin(account, token, timeout);
     }
 
     public Account getLogin(String token) {

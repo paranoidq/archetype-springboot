@@ -23,6 +23,11 @@ public class AppConfig {
     /** 对管理侧开放API接口base路径*/
     private String apiAdminPath = "/admin";
 
+    /**
+     * 登陆token有效时间
+     */
+    private int loginTokenTimeout = 60 * 60;
+
 
 
     public String getX() {
@@ -47,5 +52,13 @@ public class AppConfig {
 
     public void setApiAdminPath(String apiAdminPath) {
         this.apiAdminPath = apiAdminPath;
+    }
+
+    public int getLoginTokenTimeout() {
+        return loginTokenTimeout;
+    }
+
+    public void setLoginTokenTimeout(int loginTokenTimeout) {
+        this.loginTokenTimeout = loginTokenTimeout;
     }
 }

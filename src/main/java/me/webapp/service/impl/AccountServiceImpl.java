@@ -3,6 +3,7 @@ package me.webapp.service.impl;
 import me.webapp.common.utils.misc.IdGenerator;
 import me.webapp.common.utils.text.EncodeUtil;
 import me.webapp.common.utils.text.HashUtil;
+import me.webapp.config.AppConfig;
 import me.webapp.domain.Account;
 import me.webapp.exception.ServiceException;
 import me.webapp.manager.AccountManager;
@@ -26,7 +27,10 @@ public class AccountServiceImpl implements AccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
     @Autowired
+    private AppConfig appConfig;
+    @Autowired
     private AccountManager accountManager;
+
 
     @Transactional(readOnly = true)
     public String login(String email, String password) {
@@ -39,7 +43,8 @@ public class AccountServiceImpl implements AccountService {
         }
 
         String token = IdGenerator.uuid2();
-        accountManager.setLogin(account, token);
+        // 超时时间可配置
+        accountManager.setLogin(account, token, appConfig.getLoginTokenTimeout());
         return token;
     }
 
