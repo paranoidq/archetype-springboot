@@ -6,6 +6,7 @@ import me.webapp.common.annotation.Cache;
 import me.webapp.common.constants.CacheKeyPrefix;
 import me.webapp.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -49,12 +50,25 @@ public class AccountCache {
     }
 
 
+    @Transactional
     public void cacheAccount(Account account) {
         String id = String.valueOf(account.getId());
         String email = account.getEmail();
+        String username = account.getUsername();
 
         cache.set(cacheKey("id", id), account);
         cache.set(cacheKey("email", email), id);
+        cache.set(cacheKey("username", username), id);
+    }
+
+    @Transactional
+    public void expireAccount(String id) {
+        Account account = getAccountById(id);
+        if (account != null) {
+            cache.del(cacheKey("id", id));
+            cache.del(cacheKey("email", account.getEmail()));
+            cache.del(cacheKey("username", account.getUsername()));
+        }
     }
 
 
